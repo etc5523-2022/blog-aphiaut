@@ -30,3 +30,7 @@ body {
 a {
     color: #659DBD;
 }
+
+.navbar {
+      border-width: 0 0 0 0;
+}

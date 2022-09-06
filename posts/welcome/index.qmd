@@ -2,7 +2,7 @@
 title: "Gender Inequality Workforce in USA"
 author: "Aphiaut Imuan"
 date: "2022-09-01"
-categories: ["Economics", "Analysis", "Women"]
+categories: ["Economics", "Analysis", "Women", "Inequality"]
 image: "pexels-chevanon-photography-1108101.jpg"
 ---
 
@@ -11,13 +11,9 @@ image: "pexels-chevanon-photography-1108101.jpg"
 library(tidyverse)
 library(kableExtra)
 library(ggplot2)
-library(forcats)
-library(RColorBrewer)
-library(treemap)
-library(d3treeR)
 library(plotly)
 library(readxl)
-library(dplyr)
+library(ggthemes)
 ```
 
 
@@ -26,7 +22,7 @@ university <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytu
 ```
 
 
-In this century, gender equality is an important issue that people are concerned about and trying to reduce it. However, it doesn't change what they expected. Whether it's a developed country like the USA, there are problems with gender equality, especially equal pay. All women were paid around 83 percent of the median income that men were paid, moreover, black women can get only 64 percent [(U.S. DEPARTMENT OF LABOR, 2022)](https://blog.dol.gov/2022/03/15/connecting-the-dots-womens-work-and-the-wage-gap?_ga=2.73116245.718959912.1662380513-411305466.1662380513). This reinforces that the USA where is a developed country and being a country with large economic influence in the world, it still faces problems about gender equality 
+In this century, gender equality is an important issue that people are concerned about and trying to reduce it. However, it doesn't change what they expected. Whether it's a developed country like the USA, there are still problems with gender equality, especially equal pay. All women were paid around 83 percent of the median income that men were paid, moreover, black women can receive only 64 percent [(U.S. DEPARTMENT OF LABOR, 2022)](https://blog.dol.gov/2022/03/15/connecting-the-dots-womens-work-and-the-wage-gap?_ga=2.73116245.718959912.1662380513-411305466.1662380513). This reinforces that even with developed country that had large economic influence in the world like USA, gender equality remains as one of the most impact issue in the nation.
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 p53ar <- read_excel("data/p53ar.xlsx", 
@@ -49,23 +45,24 @@ median_2020$value <- as.numeric(median_2020$value)
 #| fig-cap: Median of Income by Sex.
 #| warning: false
 
-
-line_1 <- median_2020 %>%
+bar_1 <- median_2020 %>%
   filter(year > 1979) %>%
-  ggplot(aes(x = year, y = value))+
-  geom_line(aes(color = median_2020)) +
-  geom_point() +
-  #ggtitle("Median of Income by Sex") +
-  #scale_x_discrete(breaks = seq(10000, 51000, by = 5000))
-  scale_y_continuous(breaks = seq(10000, 51000, by = 5000)) +
-  ylab("USD (2020)")+
+  ggplot(aes(x = year, y = value, fill = median_2020))+
+  geom_col(position = "fill") +
+  scale_fill_brewer(palette = "Pastel1") +
+  theme_wsj()+
+  #ylab("USD (2020)")+
   xlab("Year")+
-  labs(color = "Sex") 
-
-ggplotly(line_1)
+  labs(fill = "Sex") +
+  scale_y_continuous(breaks = seq(0.00, 1.00, by = 0.10)) +
+  scale_x_continuous(breaks = seq(1980, 2020, by = 5))
+#bar_1
+ggplotly(bar_1)
 ```
 
-@fig-median_income illustrates the median income between males and females from 1980 to 2020. It can be seen gaps between males and females are quite wide, however, the gap is likely to decrease in the future.
+
+@fig-median_income illustrates the median income between males and females from 1980 to 2020. It can be seen gaps between males and females are quite wide, however, the gap is a slightly decreasing trend. It might be the USA established the Women’s Bureau in the U.S. Department of Labor to “formulate standards and policies which shall promote the welfare of wage-earning women, improve their working conditions, increase their efficiency, and advance their opportunities for profitable employment” (U.S. Department of Labor, 2020).
+
 
 
 ```{r, echo=FALSE, warning=FALSE}
@@ -87,14 +84,18 @@ fulltime <- university %>%
   #ggtitle("Median Income vs Percentage of Women")+
                theme(legend.position="bottom",
                      legend.text = element_text(size = 4)) +
-  labs(color = "Major Category")
+  labs(color = "Major Category") +
+  theme_stata()+
+  scale_y_continuous(breaks = seq(30000, 60000, by = 5000)) +
+  scale_color_manual(values = c("#FFCC00", "#E4D183", "#00EAD3", "#DD6892", "#2113bf", "#D89FFF", "#E71414", "#FF9000", 
+                                "#FFABE5", "#A8FF3E", "#27AA80", "#4A266A", "#FF008B", "#446840", "#0281db", "#C6F1E7"))
 
 ggplotly(fulltime)
   
 ```
 
 
-@fig-median_vs_women represents the average median income versus the percentage of women in each major category. It shows women can work in the engineering category, which is the highest median income of the categories, only 24%. While the psychology and social work category which is the lowest median income of the categories, and the health category has a share of women of around 80 percent. However, both categories are directly important to humans, there is a slight proportion for men.
+@fig-median_vs_women represents the average median income versus the percentage of women in each major category. It shows that only 24% of women can work in the engineering category, which is the highest median income of the categories. While the psychology and social work category which is the lowest median income of the categories, and the health category has a share of women of around 80 percent. Additionally, both categories are necessity and directly important to humans also, there is a slight proportion of men working in these areas.
 
 ```{r, echo=FALSE, warning=FALSE}
 #| label: tbl-high-women
@@ -131,15 +132,42 @@ low_women
 
 Moreover, @tbl-high-women shows the majors in the colleges that have a share of women more than 90 percent. This result represents most of the median income are less than `35000` US dollar per year, except for Medical Assistant Services is `42000` Annual US dollar. On the contrary, @tbl-low-women illustrates the majors in the colleges that have the share of men more than 90 percents or women less than 10 percent. It can be seen the median incomes start at `40000` Annual US dollar which is less than Medical Assistant Services by `2000` US dollar. In addition, the result of Military Technology is so interesting because this major doesn't have any women in this major.
 
-Above mention, It can be seen that America is one of the world's largest economies, however, there is still a problem with gender equality. Thus the US government should to concern and find solutions to solve this issue. By solving this problem, America's people will be happy and able to live in a constantly changing economy.
+As mentioned above, It can be seen that America is one of the world's largest economies, however, there is still a problem with gender equality. Thus the US government should raise concern and find solutions to solve this issue. By solving this problem, America's people will have better living standard and able to adapt in a constantly changing economy.
 
 # Reference
 
+Arnold J (2021). *_ggthemes: Extra Themes, Scales and Geoms for 'ggplot2'_*. R package version 4.2.4, Retrieved from
+  <https://CRAN.R-project.org/package=ggthemes>
+
+C. Sievert. *Interactive Web-Based Data Visualization with R, plotly, and shiny*. Chapman and Hall/CRC Florida, 2020.
+
+H. Wickham. *ggplot2: Elegant Graphics for Data Analysis*. Springer-Verlag New York, 2016.
+
 U.S. DEPARTMENT OF LABOR. (2022, March 14). *Connecting the Dots: “Women’s Work” and the Wage Gap | U.S. Department of Labor Blog*. Retrieved September 5, 2022, from blog.dol.gov website: https://blog.dol.gov/2022/03/15/connecting-the-dots-womens-work-and-the-wage-gap?_ga=2.73116245.718959912.1662380513-411305466.1662380513
+
+U.S. Department of Labor. (2020). History | U.S. Department of Labor. Retrieved from Dol.gov website: https://www.dol.gov/agencies/wb/about/history
+
+Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R, Grolemund G, Hayes A, Henry L, Hester J, Kuhn M, Pedersen TL, Miller
+  E, Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi K, Vaughan D, Wilke C, Woo K, Yutani H (2019). “Welcome to
+  the tidyverse.” _Journal of Open Source Software_, *4*(43), 1686. doi:10.21105/joss.01686 Retrieved from <https://doi.org/10.21105/joss.01686>.
+  
+Wickham H, Bryan J (2022). *_readxl: Read Excel Files_*. R package version 1.4.0, Retrieved from <https://CRAN.R-project.org/package=readxl>.
+
+Zhu H (2021). *_kableExtra: Construct Complex Table with 'kable' and Pipe Syntax_*. R package version 1.3.4, Retrieved from
+  <https://CRAN.R-project.org/package=kableExtra>.
+  
 
 
 # Datasets
 
 1.[Economic Guide to Picking a College Major](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-10-16)
 
+In this dataset, I use 4 variables, including `Major`, `Major category`, `Median`, and `ShareWomen`. 
+
+Major is major description. Major category is category of major from Carnevale et al. Median is median earnings of full-time, year-round workers. ShareWomen is women as share of total.
+
 2.[Wage or Salary Workers by Median Wage or Salary Income and Sex](https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-income-people.html)
+
+In this dataset, I use 3 variables, including `Year`, `Male`, and `Female`.
+
+Year is year. Male is the total median wage and salary income of male (2020 US dollars). Female is the total median wage and salary income of female (2020 US dollars).
