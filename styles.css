@@ -21,6 +21,9 @@ body {
     background-color: #fff5d4;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgb(0 0 0 / 0%);
+    text-align: justify;
+    text-justify: inter-word;
+
 }
 
 .navbar-dark .navbar-brand {
