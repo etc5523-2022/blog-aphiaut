@@ -1,4 +1,32 @@
 /* css styles */
 .navbar-dark, .quarto-title-banner {
-  background-color: #006DAE;
+  background-color: #8D8741;
+}
+
+
+.quarto-title-banner {
+    margin-bottom: 1em;
+    background: #BC986A;
+    color: rgb(4 0 0);
+}
+
+body {
+    margin: 0;
+    font-family: var(--bs-body-font-family);
+    font-size: var(--bs-body-font-size);
+    font-weight: var(--bs-body-font-weight);
+    line-height: var(--bs-body-line-height);
+    color: rgb(4 0 0);
+    text-align: var(--bs-body-text-align);
+    background-color: #fff5d4;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgb(0 0 0 / 0%);
+}
+
+.navbar-dark .navbar-brand {
+    color: rgb(255 255 255);
+}
+
+a {
+    color: #659DBD;
 }

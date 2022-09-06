@@ -10,7 +10,7 @@ website:
         href: https://github.com/aphiaut
 format:
   html:
-    theme: cosmo
+    theme: lumen
     css: styles.css
 
 
